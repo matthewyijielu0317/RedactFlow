@@ -42,6 +42,7 @@ def init_session_state():
         st.session_state.current_file_key = None
         st.session_state.detection_prompt = ""
         st.session_state.initialized = True
+        st.session_state.rejection_message = None
 
 
 def load_pdf_page_as_image(pdf_doc: fitz.Document, page_num: int, width: int = CANVAS_WIDTH) -> Image.Image:
@@ -167,7 +168,6 @@ def display_workflow_progress(state: Dict[str, Any]):
         ("🔍 Searcher", "searcher"),
         ("🤖 Detector", "detector"),
         ("📊 Evaluator", "evaluator"),
-        ("🖍️ Highlighter", "highlighter"),
         ("👤 Human Review", "hitl"),
         ("✂️ Redactor", "redactor")
     ]
@@ -184,8 +184,6 @@ def display_workflow_progress(state: Dict[str, Any]):
             elif stage_key == "detector" and state.get("sensitive_data"):
                 st.success(stage_name)
             elif stage_key == "evaluator" and state.get("evaluator_cycles", 0) > 0:
-                st.success(stage_name)
-            elif stage_key == "highlighter" and state.get("preview_pdf_path"):
                 st.success(stage_name)
             elif stage_key == "hitl" and st.session_state.show_approval_buttons:
                 st.warning(stage_name)
@@ -223,6 +221,10 @@ def main():
     
     st.title("🔒 Agentic PDF Sanitizer")
     st.markdown("*Human-in-the-Loop PDF Sanitization with AI Workflow*")
+
+    if st.session_state.rejection_message:
+        st.info(st.session_state.rejection_message)
+        st.session_state.rejection_message = None
     
     # Sidebar for controls
     with st.sidebar:
@@ -316,6 +318,8 @@ def main():
     if uploaded_file is None:
         st.info("👆 Please upload a PDF document to get started")
         return
+
+    
     
     # Ensure we have a valid PDF path
     pdf_path = st.session_state.workflow_state.get("pdf_path")
@@ -338,7 +342,7 @@ def main():
                 st.session_state.original_ai_detections = st.session_state.workflow_state["sensitive_data"].copy()
             
             # Check if we need to show approval buttons
-            if st.session_state.workflow_state.get("preview_pdf_path"):
+            if st.session_state.workflow_state.get("sensitive_data"):
                 st.session_state.show_approval_buttons = True
             
             st.rerun()
@@ -373,19 +377,9 @@ def main():
             # Load current page - use preview PDF if available, otherwise original
             current_page = st.session_state.current_page
             
-            # Check if preview PDF exists and workflow has been run
-            preview_path = st.session_state.workflow_state.get("preview_pdf_path")
-            if preview_path and os.path.exists(preview_path):
-                # Use preview PDF (with yellow highlights) for canvas
-                preview_doc = fitz.open(preview_path)
-                page_image = load_pdf_page_as_image(preview_doc, current_page, CANVAS_WIDTH)
-                page_rect = preview_doc[current_page].rect
-                preview_doc.close()
-                st.info("📋 Canvas shows preview with AI detections highlighted")
-            else:
-                # Use original PDF for canvas
-                page_image = load_pdf_page_as_image(st.session_state.pdf_doc, current_page, CANVAS_WIDTH)
-                page_rect = st.session_state.pdf_doc[current_page].rect
+            # Use original PDF for canvas
+            page_image = load_pdf_page_as_image(st.session_state.pdf_doc, current_page, CANVAS_WIDTH)
+            page_rect = st.session_state.pdf_doc[current_page].rect
             
             # Create canvas objects for existing detections
             sensitive_items = st.session_state.workflow_state.get("sensitive_data", [])
@@ -731,7 +725,7 @@ def main():
             if st.button("❌ Reject Preview", use_container_width=True):
                 st.session_state.show_approval_buttons = False
                 st.session_state.workflow_state["user_approval"] = "No"
-                st.warning("Please provide more hints in the detection prompt above and run detection again.")
+                st.session_state.rejection_message = "🤖 **To improve the results, please provide more specific instructions in the 'Detection Prompt' on the left sidebar and click 'Run Detection' again.**"
                 st.rerun()
         
         with col3:

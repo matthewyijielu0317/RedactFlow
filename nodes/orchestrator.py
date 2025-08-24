@@ -6,7 +6,6 @@ from langgraph.graph import StateGraph, END
 from .model import AzureLLM
 from .searcher_node import run_searcher
 from .detector_node import run_detector
-from .highlighter_node import run_highlighter
 from .evaluator_node import run_evaluator
 from .hitl_node import run_hitl
 from .redactor_node import run_redactor
@@ -74,7 +73,6 @@ def build_sanitizer_graph() -> StateGraph:
     graph.add_node("Orchestrator", orchestrator_node)
     graph.add_node("Searcher", run_searcher)
     graph.add_node("Detector", run_detector)
-    graph.add_node("Highlighter", run_highlighter)
     graph.add_node("Evaluator", run_evaluator)
     graph.add_node("HumanInLoop", run_hitl)
     graph.add_node("Redactor", run_redactor)
@@ -91,13 +89,13 @@ def build_sanitizer_graph() -> StateGraph:
 
     def route_from_evaluator(state: Dict[str, Any]) -> str:
         nxt = str(state.get("next_node") or "").strip()
-        return nxt if nxt in {"Detector", "Highlighter"} else "Highlighter"
+        return nxt if nxt in {"Detector", "HumanInLoop"} else "HumanInLoop"
 
     graph.add_conditional_edges("Evaluator", route_from_evaluator, {
         "Detector": "Detector",  # Feedback loop to detector
-        "Highlighter": "Highlighter"
+        "HumanInLoop": "HumanInLoop"
     })
-    graph.add_edge("Highlighter", "HumanInLoop")
+    graph.add_edge("HumanInLoop", "HumanInLoop")
 
     def route_from_hitl(state: Dict[str, Any]) -> str:
         nxt = str(state.get("next_node") or "").strip()

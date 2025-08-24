@@ -31,8 +31,8 @@ def run_evaluator(state: Dict[str, Any]) -> Dict[str, Any]:
     
     if evaluator_cycles >= max_cycles:
         # Too many cycles, proceed to highlighter
-        print(f"⚠️ Maximum evaluation cycles ({max_cycles}) reached. Proceeding to highlighter.")
-        state["next_node"] = "Highlighter"
+        print(f"⚠️ Maximum evaluation cycles ({max_cycles}) reached. Proceeding to human-in-the-loop.")
+        state["next_node"] = "HumanInLoop"
         return state
 
     print(f"🔍 Evaluator: Analyzing detection quality")
@@ -42,14 +42,14 @@ def run_evaluator(state: Dict[str, Any]) -> Dict[str, Any]:
 
     # Skip evaluation if no detection guidance or results
     if not sensitive_data_description:
-        print("⚠️ No detection guidance available, proceeding to highlighter")
-        state["next_node"] = "Highlighter"
+        print("⚠️ No detection guidance available, proceeding to human-in-the-loop")
+        state["next_node"] = "HumanInLoop"
         return state
 
     try:
         from pydantic import BaseModel
     except Exception:
-        state["next_node"] = "Highlighter"
+        state["next_node"] = "HumanInLoop"
         return state
 
     class EvaluationResult(BaseModel):
@@ -123,14 +123,14 @@ def run_evaluator(state: Dict[str, Any]) -> Dict[str, Any]:
             if res.incorrect_detections:
                 print(f"⚠️ Incorrect detections: {len(res.incorrect_detections)} items")
         else:
-            # No issues found, proceed to highlighter
-            state["next_node"] = "Highlighter"
-            print("✅ Evaluator: Detection quality acceptable, proceeding to highlighter")
+            # No issues found, proceed to human-in-the-loop
+            state["next_node"] = "HumanInLoop"
+            print("✅ Evaluator: Detection quality acceptable, proceeding to human-in-the-loop")
             
     except Exception as e:
-        # If evaluation fails, proceed to highlighter
+        # If evaluation fails, proceed to human-in-the-loop
         print(f"❌ Evaluator error: {e}")
-        state["next_node"] = "Highlighter"
+        state["next_node"] = "HumanInLoop"
     
     return state
 

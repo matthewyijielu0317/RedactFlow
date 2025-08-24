@@ -96,7 +96,6 @@ This powerful combination of an automated feedback loop and human oversight ensu
     Open the `.env` file and add your Azure OpenAI and Azure Document Intelligence credentials:
     ```
     AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
-    OPENAI_API_KEY=your_openai_api_key
     AZURE_DI_ENDPOINT=your_azure_di_endpoint
     AZURE_KEY=your_azure_key
     TAVILY_KEY=your_tavily_key
@@ -107,14 +106,14 @@ This powerful combination of an automated feedback loop and human oversight ensu
 Once you have completed the installation and configuration steps, you can run the Streamlit application:
 
 ```bash
-streamlit run hitl_streamlit_app.py
+streamlit run app.py
 ```
 
 This will open the RedactFlow application in your web browser.
 
 ## File Descriptions
 
--   **`hitl_streamlit_app.py`**: The main entry point of the application. This script runs the Streamlit UI for the human-in-the-loop interface.
+-   **`app.py`**: The main entry point of the application. This script runs the Streamlit UI for the human-in-the-loop interface.
 -   **`requirements.txt`**: A list of all the Python dependencies required for this project.
 -   **`.env.example`**: An example file for the environment variables.
 -   **`nodes/`**: This directory contains the core logic of the agentic workflow, with each file representing a node in the `langgraph` state machine.
@@ -122,7 +121,6 @@ This will open the RedactFlow application in your web browser.
     -   **`orchestrator.py`**: Defines the main `langgraph` workflow and the orchestrator node.
     -   **`detector_node.py`**: Implements the dual OCR and dual LLM detector workflow.
     -   **`evaluator_node.py`**: Implements the evaluator agent that provides feedback to the detector.
-    -   **`highlighter_node.py`**: Generates a preview PDF with highlighted sensitive data.
     -   **`hitl_node.py`**: Implements the human-in-the-loop logic.
     -   **`manual_redactor_node.py`**: Handles the application of manual redactions.
     -   **`model.py`**: A wrapper for the Azure OpenAI LLM.
