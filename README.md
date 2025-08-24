@@ -96,7 +96,6 @@ This powerful combination of an automated feedback loop and human oversight ensu
     Open the `.env` file and add your Azure OpenAI and Azure Document Intelligence credentials:
     ```
     AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
-    OPENAI_API_KEY=your_openai_api_key
     AZURE_DI_ENDPOINT=your_azure_di_endpoint
     AZURE_KEY=your_azure_key
     TAVILY_KEY=your_tavily_key
