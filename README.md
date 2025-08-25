@@ -61,6 +61,18 @@ RedactFlow's architecture is designed to continuously improve its detection accu
 
 This powerful combination of an automated feedback loop and human oversight ensures that the final redacted document is accurate, reliable, and meets the user's specific needs.
 
+## Preview before and after user's feedback
+
+![Preview Before Human Feedbakc](diagrams/preview_before_feedback.png)
+
+Give a user prompt: You failed to detect the UID and financial amount. Also, include the date.
+
+![Preview After Human Feedbakc](diagrams/preview_after_feedback.png)
+
+The Final Redacted Version is below:
+
+![FinaL Redacted Version](diagrams/final_redacted_version.png)
+
 ## How to Use
 
 ### Prerequisites
