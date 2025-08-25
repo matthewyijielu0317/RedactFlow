@@ -466,9 +466,9 @@ def _second_llm_coordinate_mapping(sensitive_content_items: List[Dict[str, Any]]
 def _init_di_client() -> DocumentIntelligenceClient:
     """Initialize Azure Document Intelligence client."""
     endpoint = os.getenv("AZURE_DI_ENDPOINT") or os.getenv("AZURE_ENDPOINT")
-    key = os.getenv("AZURE_KEY")
+    key = os.getenv("AZURE_DI_KEY")
     if not endpoint or not key:
-        raise RuntimeError("AZURE_DI_ENDPOINT (or AZURE_ENDPOINT) and AZURE_KEY must be set")
+        raise RuntimeError("AZURE_DI_ENDPOINT (or AZURE_ENDPOINT) and AZURE_DI_KEY must be set")
     return DocumentIntelligenceClient(endpoint=endpoint, credential=AzureKeyCredential(key))
 
 

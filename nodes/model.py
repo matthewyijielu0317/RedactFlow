@@ -16,24 +16,20 @@ class AzureLLM:
 
     Environment:
     - AZURE_ENDPOINT: Azure OpenAI endpoint
-    - OPENAI_API_KEY: Azure OpenAI API key (same secret as server/agent `GPT_4_1_SECRET_KEY`)
+    - AZURE_OPENAI_API_KEY: Azure OpenAI API key (same secret as server/agent `GPT_4_1_SECRET_KEY`)
     - AZURE_API_VERSION (optional): defaults to 2025-03-01-preview
     - OPENAI_DEPLOYMENT (optional): Azure deployment name; defaults to gpt-4o
     """
 
     def __init__(self, model: str | None = None) -> None:
         # Prefer a dedicated Azure OpenAI endpoint if provided
-        self.azure_endpoint = (
-            os.getenv("AZURE_OPENAI_ENDPOINT")
-            or os.getenv("OPENAI_API_BASE")
-            or os.getenv("AZURE_ENDPOINT")
-        )
-        self.openai_api_key = os.getenv("OPENAI_API_KEY")
+        self.azure_endpoint = (os.getenv("AZURE_OPENAI_ENDPOINT"))
+        self.openai_api_key = os.getenv("AZURE_OPENAI_API_KEY")
         self.azure_api_version = os.getenv("AZURE_API_VERSION", "2025-03-01-preview")
         self.model = model or os.getenv("OPENAI_DEPLOYMENT", "gpt-4o")
         if not self.azure_endpoint or not self.openai_api_key:
             raise RuntimeError(
-                "Azure OpenAI not configured. Set OPENAI_API_KEY and AZURE_OPENAI_ENDPOINT (or OPENAI_API_BASE)."
+                "Azure OpenAI not configured. Set AZURE_OPENAI_API_KEY and AZURE_OPENAI_ENDPOINT."
             )
 
         # Azure OpenAI SDK client (for free-form chat)

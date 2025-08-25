@@ -1,4 +1,4 @@
-# RedactFlow: Agentic PDF Sanitizer
+# ✂️🤖 RedactFlow: Agentic PDF Sanitizer
 
 RedactFlow is a powerful and intelligent PDF sanitization tool that uses a sophisticated agentic workflow to detect and redact sensitive information from your documents. It combines state-of-the-art AI models with a human-in-the-loop (HITL) interface to ensure accurate and reliable redaction.
 
@@ -27,7 +27,6 @@ The workflow consists of the following key nodes:
 -   **Searcher:** (Optional) Searches for external regulations and compliance information to enrich the detection criteria.
 -   **Detector:** The core of the sensitive data detection process. It uses a dual OCR and dual LLM architecture to identify sensitive information and its precise coordinates in the PDF.
 -   **Evaluator:** Reviews the detected sensitive data and provides feedback to the `Detector` to improve accuracy. This creates an iterative feedback loop to refine the detection results.
--   **Highlighter:** Generates a preview PDF with the detected sensitive data highlighted for user review.
 -   **Human-in-the-Loop (HITL):** Pauses the workflow and waits for the user to review, edit, and approve the redactions through the Streamlit UI.
 -   **Redactor:** Applies the final redactions to the PDF, creating a sanitized version of the document.
 
@@ -98,6 +97,7 @@ This powerful combination of an automated feedback loop and human oversight ensu
     AZURE_OPENAI_ENDPOINT=your_azure_openai_endpoint
     AZURE_DI_ENDPOINT=your_azure_di_endpoint
     AZURE_KEY=your_azure_key
+    AZURE_OPENAI_API_KEY=your_azure_openai_key
     TAVILY_KEY=your_tavily_key
     ```
 
