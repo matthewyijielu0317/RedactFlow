@@ -47,7 +47,7 @@ def init_session_state():
 
 def load_pdf_page_as_image(pdf_doc: fitz.Document, page_num: int, width: int = CANVAS_WIDTH) -> Image.Image:
     """Convert PDF page to PIL Image for canvas display."""
-    page = pdf_doc[page_num]
+    page = pdf_doc.load_page(page_num)
     
     # Calculate scale to fit canvas width
     page_rect = page.rect
@@ -379,7 +379,7 @@ def main():
             
             # Use original PDF for canvas
             page_image = load_pdf_page_as_image(st.session_state.pdf_doc, current_page, CANVAS_WIDTH)
-            page_rect = st.session_state.pdf_doc[current_page].rect
+            page_rect = st.session_state.pdf_doc.load_page(current_page).rect 
             
             # Create canvas objects for existing detections
             sensitive_items = st.session_state.workflow_state.get("sensitive_data", [])
