@@ -219,7 +219,7 @@ def main():
             if "final_pdf_path" in st.session_state.workflow_state:
                 st.sidebar.write(f"Final PDF: {st.session_state.workflow_state['final_pdf_path']}")
     
-    st.title("🔒 Agentic PDF Sanitizer")
+    st.title("✂️🤖 Agentic PDF Sanitizer")
     st.markdown("*Human-in-the-Loop PDF Sanitization with AI Workflow*")
 
     if st.session_state.rejection_message:
@@ -312,6 +312,10 @@ def main():
             # Reset previous results
             st.session_state.show_approval_buttons = False
             st.session_state.preview_approved = False
+            
+            # Clear the prompt from the UI
+            st.session_state.detection_prompt = ""
+            
             st.rerun()
     
     # Main content area
@@ -727,7 +731,7 @@ def main():
                 st.session_state.workflow_state["user_approval"] = "No"
                 st.session_state.rejection_message = "🤖 **To improve the results, please provide more specific instructions in the 'Detection Prompt' on the left sidebar and click 'Run Detection' again.**"
                 st.rerun()
-        
+
         with col3:
             # Manual-only redaction option
             manual_count = len(st.session_state.manual_rectangles)

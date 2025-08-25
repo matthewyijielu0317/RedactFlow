@@ -21,13 +21,13 @@ def run_evaluator(state: Dict[str, Any]) -> Dict[str, Any]:
 
     # Prevent infinite loops: limit evaluator feedback cycles  
     evaluator_cycles = state.get("evaluator_cycles", 0)
-    max_cycles = state.get("max_evaluator_cycles", 3)  # Default 3 cycles as specified
+    max_cycles = state.get("max_evaluator_cycles", 1)  # Default 3 cycles as specified
     
     # Initialize cycle counter if not present
     if "evaluator_cycles" not in state:
         state["evaluator_cycles"] = 0
     if "max_evaluator_cycles" not in state:
-        state["max_evaluator_cycles"] = 3
+        state["max_evaluator_cycles"] = 1
     
     if evaluator_cycles >= max_cycles:
         # Too many cycles, proceed to highlighter
